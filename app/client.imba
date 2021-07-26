@@ -12,12 +12,14 @@ let toggleMachine = createMachine
 		off:
 			on: {TOGGLE: 'on'}
 		on:
-			on: {TOGGLE: 'off'}
+			on: 
+				TOGGLE: 'off'
+				"done.invoke.todo": 'off'
 			entry: assign {todo: do spawn todo, "todo"}
 			exit: actions.stop do $1.todo
 
 let toggleService = interpret toggleMachine, {devTools: true}
-toggleService.start()
+toggleService.start!
 
 
 global css html

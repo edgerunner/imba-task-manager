@@ -1,36 +1,39 @@
-import { createMachine } from 'xstate'
+import { createMachine, assign } from 'xstate'
 
-let machine = createMachine
+export default createMachine
 	id: "todo"
-	initial: "active"
+	initial: "draft"
+	context:
+		title: ""
+
 	states:
-		active:
-			initial: "pending"
-			states:
-				pending: 
-					on: {START: "running"}
-				running: 
-					on: 
-						COMPLETE: "#todo.inactive.completed"
-						PAUSE: "paused"
-				paused: 
-					on: {CONTINUE: "running"}
-				stalled: 
-					on: {CONTINUE: "running"}
-				previous:
-					type: "history"
+		draft:
 			on:
-				CANCEL: "inactive.cancelled"
-				TRASH: "inactive.trashed"
-				STALL: ".stalled"
+				SUBMIT: 
+					target: "pending"
+					cond: "hasTitle"
+				UPDATE:
+					actions:
+						assign do(ctx,evt) [evt["field"]]: evt["value"]
 
-		inactive:
-			initial: "cancelled"
-			states:
-				cancelled: { type: "final" }
-				completed: { type: "final" }
-				trashed: { type: "final" }
-			on: { REVERT: "active.previous" }
- 
+		pending:
+			on:
+				START: "ongoing"
+		ongoing:
+			on:
+				PAUSE: "paused"
+				FINISH: "done"
+		paused:
+			on:
+				RESUME: "ongoing"
+		done:
+			type: "final"
+		dropped: 
+			type: "final"
 
-export default machine
+	on: { DROP: ".dropped" }
+	,
+	{
+		guards:
+			hasTitle: do(ctx) ctx.title.length > 3
+	}
