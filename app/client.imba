@@ -1,22 +1,23 @@
 import { inspect } from '@xstate/inspect'
 import { createMachine, interpret, assign, spawn, actions } from 'xstate'
-import todo from './todo'
+import todos from './todos'
 
 inspect iframe: false
+
+console.log todos
 
 let toggleMachine = createMachine
 	id: 'toggle'
 	initial: 'off'
-	context: {todo: undefined}
+	context: {todos: undefined}
 	states: 
 		off:
 			on: {TOGGLE: 'on'}
 		on:
 			on: 
 				TOGGLE: 'off'
-				"done.invoke.todo": 'off'
-			entry: assign {todo: do spawn todo, "todo"}
-			exit: actions.stop do $1.todo
+			entry: assign {todos: do spawn todos, "todos"}
+			exit: actions.stop do $1.todos
 
 let toggleService = interpret toggleMachine, {devTools: true}
 toggleService.start!
