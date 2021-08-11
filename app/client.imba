@@ -3,7 +3,7 @@ import { interpret } from 'xstate'
 import todos from './todos'
 import { DraftTodoForm } from './tags/draft-todo-form'
 
-inspect iframe: false
+inspect iframe: false, url: "https://stately.ai/viz"
 
 
 global css html
