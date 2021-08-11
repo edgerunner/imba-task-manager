@@ -1,38 +1,40 @@
 import { inspect } from '@xstate/inspect'
-import { createMachine, interpret, assign, spawn, actions } from 'xstate'
+import { interpret } from 'xstate'
 import todos from './todos'
+import { DraftTodoForm } from './tags/draft-todo-form'
 
 inspect iframe: false
-
-console.log todos
-
-let toggleMachine = createMachine
-	id: 'toggle'
-	initial: 'off'
-	context: {todos: undefined}
-	states: 
-		off:
-			on: {TOGGLE: 'on'}
-		on:
-			on: 
-				TOGGLE: 'off'
-			entry: assign {todos: do spawn todos, "todos"}
-			exit: actions.stop do $1.todos
-
-let toggleService = interpret toggleMachine, {devTools: true}
-toggleService.start!
 
 
 global css html
 	ff:sans
 
 tag app
+	prop service = interpret todos, {devTools: true} 
+	
+	def setup
+		service.start!
+		service.onTransition do imba.commit!
+		
+
 	<self>
 		<header>
 			<svg[w:200px h:auto] src='./logo.svg'>
 			<p> "Edit {<code> "app/client.imba"} and save to reload"
 			<a href="https://imba.io"> "Learn Imba"
-			<p>
-				<button @click=toggleService.send('TOGGLE')> toggleService.state.value
+		<div>
+			switch service.state.value
+				when "blank"
+					<button @click=service.send("ADD")> "Add your first todo"
+				when "ongoing"
+					<ul>
+						for todo of service.state.context.todos
+							<li>
+								<DraftTodoForm todo=todo>
+					<button @click=service.send("ADD")> "Add another todo"
+				when "resolved"
+					<button @click=service.send("ADD")> "Add yet another todo"
+				else
+					"WTF?"
 
 imba.mount <app>
