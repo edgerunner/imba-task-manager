@@ -1,21 +1,16 @@
 export tag DraftTodoForm
-	attr todo
+	prop todo
 
-	prop title = ""
-
-	def mount
-		console.log todo
-
-	def update-title
+	def update-title {target}
 		todo.send
 			type: "UPDATE"
 			field: "title"
-			value: title
+			value: target.value
 
 	def submit-todo
 		todo.send "SUBMIT"
 
 	<self>
-		<input @input=update-title bind=title >
+		<input @input=update-title >
 		<button @click=submit-todo >
 			"🆕"
