@@ -1,4 +1,4 @@
-export tag DraftTodoForm
+export tag draft-todo-form
 	prop todo
 
 	def update-title {target}
