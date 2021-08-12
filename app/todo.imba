@@ -8,10 +8,19 @@ export default createMachine
 
 	states:
 		draft:
+			initial: "invalid"
+			states:
+				invalid:
+					always:
+						cond: "hasTitle"
+						target: "valid"
+				valid:
+					on:
+						SUBMIT: "#todo.pending"
+					always:
+						cond: "noTitle"
+						target: "invalid"
 			on:
-				SUBMIT: 
-					target: "pending"
-					cond: "hasTitle"
 				UPDATE:
 					actions:
 						assign do(ctx,evt) [evt["field"]]: evt["value"]
@@ -36,4 +45,5 @@ export default createMachine
 	{
 		guards:
 			hasTitle: do(ctx) ctx.title.length > 3
+			noTitle: do(ctx) ctx.title.length <= 3
 	}
