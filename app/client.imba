@@ -9,6 +9,13 @@ inspect iframe: false, url: "https://stately.ai/viz?inspect"
 global css html
 	ff:sans
 
+css .dropped@marker
+	content: '🚮 '
+
+css .done@marker
+	content: '✅ '
+
+
 tag app
 	prop service = interpret todos, {devTools: true} 
 	
@@ -34,6 +41,10 @@ tag app
 					<button @click=service.send("ADD")> "Add another todo"
 				when "resolved"
 					<button @click=service.send("ADD")> "Add yet another todo"
+					<ul>
+						for todo of service.state.context.todos
+							<li .{todo.state.value}> todo.state.context.title
+					
 				else
 					"WTF?"
 
