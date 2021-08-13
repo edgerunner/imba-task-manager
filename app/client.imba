@@ -1,7 +1,7 @@
 import { inspect } from '@xstate/inspect'
 import { interpret } from 'xstate'
 import todos from './todos'
-import './tags/draft-todo-form'
+import './tags/todo'
 
 inspect iframe: false, url: "https://stately.ai/viz?inspect"
 
@@ -33,7 +33,7 @@ tag app
 					<ul>
 						for todo of service.state.context.todos
 							<li>
-								<draft-todo-form todo=todo>
+								<todo todo=todo>
 					<button @click=service.send("ADD")> "Add another todo"
 				when "resolved"
 					<button @click=service.send("ADD")> "Add yet another todo"
