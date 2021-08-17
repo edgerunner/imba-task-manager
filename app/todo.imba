@@ -23,7 +23,7 @@ export default createMachine
 			on:
 				UPDATE:
 					actions:
-						assign do(ctx,evt) [evt["field"]]: evt["value"]
+						"updateField"
 
 		pending:
 			on:
@@ -46,4 +46,6 @@ export default createMachine
 		guards:
 			hasTitle: do(ctx) ctx.title.length > 3
 			noTitle: do(ctx) ctx.title.length <= 3
+		actions:
+			updateField: assign do(ctx,evt) [evt["field"]]: evt["value"]
 	}
