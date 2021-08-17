@@ -1,13 +1,20 @@
 import { inspect } from '@xstate/inspect'
 import { interpret } from 'xstate'
 import todos from './todos'
-import { DraftTodoForm } from './tags/draft-todo-form'
+import './tags/todo'
 
-inspect iframe: false, url: "https://stately.ai/viz"
+inspect iframe: false, url: "https://stately.ai/viz?inspect"
 
 
 global css html
 	ff:sans
+
+css .dropped@marker
+	content: '🚮 '
+
+css .done@marker
+	content: '✅ '
+
 
 tag app
 	prop service = interpret todos, {devTools: true} 
@@ -18,10 +25,6 @@ tag app
 		
 
 	<self>
-		<header>
-			<svg[w:200px h:auto] src='./logo.svg'>
-			<p> "Edit {<code> "app/client.imba"} and save to reload"
-			<a href="https://imba.io"> "Learn Imba"
 		<div>
 			switch service.state.value
 				when "blank"
@@ -30,10 +33,14 @@ tag app
 					<ul>
 						for todo of service.state.context.todos
 							<li>
-								<DraftTodoForm todo=todo>
+								<todo todo=todo>
 					<button @click=service.send("ADD")> "Add another todo"
 				when "resolved"
 					<button @click=service.send("ADD")> "Add yet another todo"
+					<ul>
+						for todo of service.state.context.todos
+							<li .{todo.state.value}> todo.state.context.title
+					
 				else
 					"WTF?"
 

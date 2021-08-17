@@ -13,9 +13,8 @@ export default createMachine
 					target: "pending"
 					cond: "hasTitle"
 				UPDATE:
-					actions:
-						assign do(ctx,evt) [evt["field"]]: evt["value"]
-
+					actions: "updateField"
+						
 		pending:
 			on:
 				START: "ongoing"
