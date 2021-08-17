@@ -4,12 +4,12 @@ tag todo
 	prop todo
 
 	prop emoji = {
-		SUBMIT: '🆕'
-		START: '▶️'
-		PAUSE: '⏸'
-		RESUME: '⏯'
-		FINISH: '✅'
-		DROP: '🚮'	
+		SUBMIT: '🆕 Submit'
+		START: '▶️ Start'
+		PAUSE: '⏸ Pause'
+		RESUME: '⏯ Resume'
+		FINISH: '✅ Finish'
+		DROP: '🚮 Drop'	
 	}
 
 	def mount
